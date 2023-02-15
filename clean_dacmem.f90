@@ -11,6 +11,7 @@ subroutine clean_dacmem (geometry,params,delaunay,network,stack,landscape)
   type (parm) params
   type (lands) landscape
 
+  integer i
 
   deallocate (geometry%x,geometry%y,geometry%z)
   deallocate (geometry%xdiv,geometry%ydiv,geometry%zdiv)
@@ -37,14 +38,22 @@ subroutine clean_dacmem (geometry,params,delaunay,network,stack,landscape)
    deallocate(network%receiver,network%ndon,network%lakes,network%lakes_catch,network%donors)
 
    deallocate(stack%order)
-return
 
-if(params%f_varies_with_xyz)then
+if(params%f_varies)then
    deallocate (params%f_depends_on, params%f_variable_determined,params%f_polyseg, params%f_superpose  )  ! dimension f_num_sets
    deallocate ( params%f_timebound)       ! limit validity of condition block in time
    deallocate (params%poly )       ! polynomial coefficients
    deallocate ( params%pn )  ! degree/elements per line
+   deallocate (params%f_ctype, params%f_cidx)
+   deallocate (params%f_rmarg, params%f_rnnode)
+   do i=1,params%f_num_rast
+     deallocate ( params%f_raster(i)%matx )
+   enddo
+   deallocate (params%f_raster)
+   print*, 'deallocated conditions'
 endif
+
+
 
 if(params%show_vtkfine)deallocate (landscape%xx,landscape%yy,landscape%zz,landscape%edot,landscape%fineicon)
 

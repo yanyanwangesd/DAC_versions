@@ -12,7 +12,7 @@ subroutine reinit_geometry (geometry,params,network,delaunay)
   type (netw) network
   type (del) delaunay
   integer i,j, nnode,xmin,xmax,ymin,ymax
-  character*4   cs
+  character*6   cs
 
   call time_in ('reinit_geometry')
 
@@ -27,10 +27,12 @@ subroutine reinit_geometry (geometry,params,network,delaunay)
   !print*, '******'
   !open (5,file='GeoFile',status='unknown')
 
-  write(cs,'(I4)') params%num_restart
-  if (params%num_restart.lt.10)        cs(1:3)='000'
-  if (params%num_restart.lt.100)       cs(1:2)='00'
-  if (params%num_restart.lt.1000)      cs(1:1)='0'
+  write(cs,'(I6)') params%num_restart
+  if (params%num_restart.lt.10)        cs(1:5)='00000'
+  if (params%num_restart.lt.100)       cs(1:4)='0000'
+  if (params%num_restart.lt.1000)      cs(1:3)='000'
+  if (params%num_restart.lt.10000)     cs(1:2)='00'
+  if (params%num_restart.lt.100000)    cs(1:1)='0'
 
   
   open(unit=51,file= 'RESTART/GeoFile'//cs,form='unformatted')
@@ -46,7 +48,7 @@ subroutine reinit_geometry (geometry,params,network,delaunay)
   print*, 'endtime = ',params%tfinal
   geometry%nnode=nnode ! computes total number of nodes
   geometry%nnode_max=geometry%nnode*51
-  geometry%nnmax=12 ! nnmax is the maximum number of neighbour nodes per node; 12 is usually enough
+  !geometry%nnmax=12 ! nnmax is the maximum number of neighbour nodes per node; 12 is usually enough
   geometry%ndivide_max = geometry%nnode_max*(geometry%nnmax-1) !max number of divides
   geometry%ndivide=0 ! don't change this
   geometry%ncapture=0 ! don't cahnge this
@@ -173,7 +175,6 @@ subroutine reinit_geometry (geometry,params,network,delaunay)
      read(51) geometry%fix(i)
   enddo
  
-   if(params%f_varies_with_xyz .eqv. .FALSE.)geometry%w=params%uplift_scalar1
 
 
   read(51) delaunay%ntriangles
@@ -198,6 +199,12 @@ subroutine reinit_geometry (geometry,params,network,delaunay)
   enddo
 
 
+
+   ! housekeeping - initialize all arrayse
+   geometry%precipitation=params%rainfall_height
+    geometry%u=0
+    geometry%v=0
+    geometry%w=params%uplift_scalar1
 
 
 

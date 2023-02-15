@@ -714,6 +714,7 @@ subroutine captures_and_divides (geometry,network,params,delaunay)
     
     
   else ! if mh/n not equal 1
+
     do iii=1, maxpass
 	ncapture=0
 	do ii=1,geometry%nnode ! loop over the nodes

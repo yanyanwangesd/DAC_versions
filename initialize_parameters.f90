@@ -43,7 +43,7 @@ print*, 'Precip = ',params%rainfall_height
 print*, ''
 print*, 'Channel head erosion parameters: '
 print*, 'Xc = ',params%xc
-print*, 'Threshold tan theta = ',params%tanthetac
+print*, 'tan theta = ',params%tanthetac
 print*, 'Diffusivity = ',params%diffusivity/2.
 
 
@@ -74,19 +74,19 @@ sloped_total=u*params%xc/(params%diffusivity)
 sloped=180*atan(sloped)/3.141592
 sloped_total=180*atan(sloped_total)/3.141592
 if(slope.gt.(180*atan(params%tanthetac)/3.141592))then
-print*, '!! warning Threshold slope at channel head is less steep than channel'
+print*, '!! warning channel head slope is less steep than channel'
 endif
 if(sloped_total.lt.slope)then
 print*, 'Warning!!! diffusive channel head slope is less steep than channel'
 endif
-print*, 'max slope of fluvial channel: ', slope
-print*, 'Threshold slope at channel head: ', (180*atan(params%tanthetac)/3.141592)
-print*, 'max diffusive slope at channel head: ', sloped_total
+print*, 'max slope of channel: ', slope
+print*, 'slope of channel head: ', (180*atan(params%tanthetac)/3.141592)
+print*, 'max diffusive slope of channel head: ', sloped_total
 
 ! check the channel head area
 
 area=params%ka*params%xc**params%h
-if(params%amin.gt.area)print*,'Warning!!!! minimum channel head area too small'
+if(params%amin.lt.area)print*,'Warning!!!! minimum channel head area too small'
 print*, 'Channel Head Area = ',area/1.d6
 print*, 'Remesh minimum area used = ',params%amin/1.d6
 

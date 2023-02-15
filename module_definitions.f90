@@ -1,8 +1,13 @@
 MODULE definitions
 
+   ! this new type is needed to make a list of 2D allocatable arrays
+   type rastptr
+      double precision, dimension(:,:), allocatable::matx
+   end type rastptr
+
    type parm
       integer istep,freq,num_restart
-      double precision deltat,time,tfinal,h,ka,xc,tanthetac,hmn,m,n
+      double precision deltat,time,tfinal,h,ka,xc,tanthetac,hmn,m, n
       double precision rainfall_available,rainfall_minimum,rainfall_height
       double precision lmax,diffusivity,amin,min_erosion_rate,uplift_scalar1
       double precision uplift_scalar2,k_scalar1,ldivmax, max_adv, min_tan_head_slope
@@ -14,12 +19,15 @@ MODULE definitions
       logical read_restart, ascii, transient_divide
       logical show_vtkfine
       integer num_bins, sample_per_bin
-      logical f_varies_with_xyz
-      integer f_num_sets        ! number of condition blocks
-      integer,dimension(:),pointer:: f_depends_on, f_variable_determined,f_polyseg, f_superpose     ! dimension f_num_sets
+      logical f_varies
+      integer filestate
+      integer f_num_sets, f_num_rast, f_num_polc        ! number of condition blocks
+      integer,dimension(:),pointer:: f_ctype, f_depends_on, f_variable_determined,f_polyseg, f_superpose     ! dimension f_num_sets
       double precision,dimension(:,:),pointer:: f_timebound       ! limit validity of condition block in time
       double precision,dimension(:,:,:),pointer::poly       ! polynomial coefficients
-      integer,dimension(:,:),pointer:: pn   ! degree/elements per line
+      integer,dimension(:,:),pointer:: pn, f_cidx   ! degree/elements per line, list of nset->nsetr
+      double precision,dimension(:,:),pointer::  f_rmarg, f_rnnode
+      type(rastptr), dimension(:),pointer :: f_raster
    end type parm
 
    type geom
@@ -32,7 +40,7 @@ MODULE definitions
       double precision,dimension(:,:),pointer::surface_share
       integer,dimension(:),pointer::fix,nb,catchment
       integer,dimension(:,:),pointer::nn
-      integer,dimension(:,:),pointer::nndivtri !for each divide two triangles  
+      integer,dimension(:,:),pointer::nndivtri !for each divide two triangles
       integer,dimension(:,:),pointer::nndivnode !for each divide two nodes
       integer,dimension(:),pointer::nt ! number of triangles for each node
       integer, dimension(:,:),pointer::nnodetri ! for each node its neighboring triangles

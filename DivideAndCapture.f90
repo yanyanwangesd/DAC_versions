@@ -61,19 +61,20 @@ program DivideAndCapture
 
   call find_strahler(geometry,network,stack)
  
-  call output_z_tau(params,geometry,network,stack)
+  
 
   call VTK (geometry,delaunay,params,network,stack)
 
   if (params%show_vtkfine)  call finetri (geometry, params,delaunay, network, landscape)
   if (params%show_vtkfine) call VTKfine (geometry,delaunay,params,network,stack,landscape)
 
-  if (params%ascii) call write_ascii(geometry,params,network)
   call output_geometry(geometry,params,network,delaunay)
 
 
   !more frequent global data on the system is output to these files
   if (params%ascii) then
+      call write_ascii(geometry,params,network)
+      call output_z_tau(params,geometry,network,stack)
       open (80,file='ASCII/capture_data',status='unknown')
       write(80,'(F8.1,i10)') params%time, geometry%ncapture
       old_ncapture = geometry%ncapture
@@ -142,7 +143,7 @@ program DivideAndCapture
 
   call find_strahler(geometry,network,stack)
   if (params%show_vtkfine)  call finetri (geometry, params,delaunay,network, landscape)
-  call output_z_tau(params,geometry,network,stack)
+  if (params%ascii) call output_z_tau(params,geometry,network,stack)
   call VTK (geometry,delaunay,params,network,stack)
   if (params%show_vtkfine) call VTKfine (geometry,delaunay,params,network,stack,landscape)
   if (params%ascii) call write_ascii(geometry,params,network)

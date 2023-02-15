@@ -10,16 +10,23 @@ subroutine output_geometry (geometry,params,network,delaunay)
   type (netw) network
   type (del) delaunay
   integer i, j
-  character*4  cs
+  character*6  cs
 
 
   call time_in ('output_geometry')
   
-  write(cs,'(I4)') params%num_restart
-  if (params%num_restart.lt.10)        cs(1:3)='000'
-  if (params%num_restart.lt.100)       cs(1:2)='00'
-  if (params%num_restart.lt.1000)      cs(1:1)='0'
+  !write(cs,'(I4)') params%num_restart
+  !if (params%num_restart.lt.10)        cs(1:3)='000'
+  !if (params%num_restart.lt.100)       cs(1:2)='00'
+  !if (params%num_restart.lt.1000)      cs(1:1)='0'
   !if (params%num_restart.lt.10000)     cs(1:4)=''
+  
+    write(cs,'(I6)') params%num_restart
+  if (params%num_restart.lt.10)        cs(1:5)='00000'
+  if (params%num_restart.lt.100)       cs(1:4)='0000'
+  if (params%num_restart.lt.1000)      cs(1:3)='000'
+  if (params%num_restart.lt.10000)     cs(1:2)='00'
+  if (params%num_restart.lt.100000)    cs(1:1)='0'
   
   
   params%num_restart = params%num_restart + 1

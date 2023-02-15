@@ -67,7 +67,7 @@ subroutine find_network (geometry,delaunay,network,iflag)
         slope=(geometry%z(i)-geometry%z(k))
         bflag=0
         if(geometry%fix(k).ne.0)  bflag = geometry%boundary( geometry%fix(k) )
-        if (slope.gt.0.d0) then
+        if (slope.gt.0.d0 .and. geometry%fix(i).eq.0) then
            slope=slope/sqrt((geometry%x(i)-geometry%x(k))**2+(geometry%y(i)-geometry%y(k))**2)
            if (slope.gt.slopemax     .and. bflag.ge.0) then
               slopemax=slope

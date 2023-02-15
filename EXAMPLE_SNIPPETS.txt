@@ -2,6 +2,8 @@
 //EXAMPLE ONE
 //A case with different conditions combined - note: right boundary should move (8-12, >=24)-----------------
 //---------------- block 1
+/f_input_type
+p
 /f_depends_on  - choice:  x,y,z
 y
 /f_variable_determined  - choice:  u,v,w, p,k
@@ -18,6 +20,8 @@ u
 
 
 //---------------- block 2
+/f_input_type
+p
 /f_depends_on  - choice:  x,y,z
 y
 /f_variable_determined  - choice:  u,v,w, p,k
@@ -34,6 +38,8 @@ u
 
 
 //---------------- block 3
+/f_input_type
+p
 /f_depends_on  - choice:  x,y,z
 x
 /f_variable_determined  - choice:  u,v,w, p,k
@@ -51,6 +57,8 @@ v
 //---------------- block 3
 
 //---------------- block 4
+/f_input_type
+p
 /f_depends_on  - choice:  x,y,z
 x
 /f_variable_determined  - choice:  u,v,w, p,k
@@ -69,6 +77,8 @@ w
 
 
 //---------------- block 5
+/f_input_type
+p
 /f_depends_on  - choice:  x,y,z
 y
 /f_variable_determined  - choice:  u,v,w, p,k
@@ -97,6 +107,8 @@ P
 //EXAMPLE TWO
 //moving uplift - to mimick time-dependent signal, rather keep uplift in place, and move entire mesh over it.
 //---------------- block 1
+/f_input_type
+p
 /f_depends_on  - choice:  x,y,z
 x
 /f_variable_determined  - choice:  u,v,w, p,k
@@ -113,6 +125,8 @@ u
 
 
 //---------------- block 2
+/f_input_type
+p
 /f_depends_on  - choice:  x,y,z
 x
 /f_variable_determined  - choice:  u,v,w, p,k
@@ -131,6 +145,8 @@ w
 
 
 //---------------- block 3
+/f_input_type
+p
 /f_depends_on  - choice:  x,y,z
 y
 /f_variable_determined  - choice:  u,v,w, p,k
@@ -164,6 +180,8 @@ w
 //EXAMPLE THREE
 //Ramp of uplift to center in both directions
 //---------------- block 1
+/f_input_type
+p
 /f_depends_on  - choice:  x,y,z
 x
 /f_variable_determined  - choice:  u,v,w, p,k
@@ -182,6 +200,8 @@ w
 
 
 //---------------- block 2
+/f_input_type
+p
 /f_depends_on  - choice:  x,y,z
 y
 /f_variable_determined  - choice:  u,v,w, p,k
@@ -212,6 +232,8 @@ w
 //EXAMPLE FOUR
 //decay signal
 //---------------- block 1
+/f_input_type
+p
 /f_depends_on  - choice:  x,y,z
 x
 /f_variable_determined  - choice:  u,v,w, p,k
@@ -230,6 +252,8 @@ w
 
 
 //---------------- block 2
+/f_input_type
+p
 /f_depends_on  - choice:  x,y,z
 y
 /f_variable_determined  - choice:  u,v,w, p,k
@@ -261,6 +285,8 @@ w
 //EXAMPLE FIVE
 //decay signal, and build up a new one (overlay)
 //---------------- block 1
+/f_input_type
+p
 /f_depends_on  - choice:  x,y,z
 x
 /f_variable_determined  - choice:  u,v,w, p,k
@@ -279,6 +305,8 @@ w
 
 
 //---------------- block 2
+/f_input_type
+p
 /f_depends_on  - choice:  x,y,z
 y
 /f_variable_determined  - choice:  u,v,w, p,k
@@ -297,6 +325,8 @@ w
 
 
 //---------------- block 3
+/f_input_type
+p
 /f_depends_on  - choice:  x,y,z
 y
 /f_variable_determined  - choice:  u,v,w, p,k
@@ -315,6 +345,8 @@ w
 
 
 //---------------- block 4
+/f_input_type
+p
 /f_depends_on  - choice:  x,y,z
 y
 /f_variable_determined  - choice:  u,v,w, p,k
@@ -336,4 +368,38 @@ w
 
 
 
+//EXAMPLE SIX
+//reading two flat rasters for initial topography and uplift
+//---------------- raster block 1
+/f_input_type
+R
+/raster filename
+dac_topo1.txt
+/f_raster_format : 0 - plain text,  1 - asc, 2 - csv
+0
+/f_variable_determined  - choice:  u,v,w, p,k
+z
+/superposition  0 - overwrite, 1 - add, 2 - multiply
+1
+/time bounds [a], if any -  write 0, 0 for eternity; e.g. 0, 1.d6 makes condition only valid for first 1 Ma
+0, 0.1
+/margin exceedance - use to set conditions where DAC is advected to. Left, right, front(bottom), back(top)
+0, 0, 0, 0
+//---------------- raster block 1
 
+//---------------- raster block 2
+/f_input_type
+R
+/raster filename
+dac_uplift1.txt
+/f_raster_format : 0 - plain text,  1 - asc, 2 - csv
+0
+/f_variable_determined  - choice:  u,v,w, p,k
+w
+/superposition  0 - overwrite, 1 - add, 2 - multiply
+0
+/time bounds [a], if any -  write 0, 0 for eternity; e.g. 0, 1.d6 makes condition only valid for first 1 Ma
+0,0
+/margin exceedance - use to set conditions where DAC is advected to. Left, right, front(bottom), back(top)
+0, 0, 0, 0
+//---------------- raster block 2

@@ -1,12 +1,12 @@
 subroutine initialize_geometry (geometry,params)
-  
+
   ! Subroutine to initialize the gemetry of the problem
   ! such as node locations, velocities, erosional properties, etc
-  
+
   use definitions
-  
+
   implicit none
-  
+
   type (parm) params
   type (geom) geometry
   integer nx,ny,n
@@ -16,7 +16,7 @@ subroutine initialize_geometry (geometry,params)
 
 
   call time_in ('initialize_geometry')
-  
+
   ! In this beta version we will position the nodes on a quasi regular rectangular grid
   ! of size xl by yl and nx by ny nodes; the location of the nodses will be randomly "shaken"
   ! zl is the maximum height of the initial landscape
@@ -34,8 +34,8 @@ zl =  geometry%zl
   geometry%ndivide_max = geometry%nnode_max*(geometry%nnmax-1) !max number of divides
   geometry%ndivide=0 ! don't change this
   geometry%ncapture=0 ! don't cahnge this
-  
-  
+
+
   print*, ' '
   print*, 'Grid parameters: '
   print*, 'nx = ',nx
@@ -44,10 +44,10 @@ zl =  geometry%zl
   print*, 'yl = ',yl
   print*, 'zl = ',zl
   print*, ' '
-  
+
   allocate (geometry%x(geometry%nnode_max),geometry%y(geometry%nnode_max),geometry%z(geometry%nnode_max))
   allocate (geometry%xdiv(geometry%ndivide_max),geometry%ydiv(geometry%ndivide_max),&
-       &geometry%zdiv(geometry%ndivide_max))	
+       &geometry%zdiv(geometry%ndivide_max))
   allocate (geometry%u(geometry%nnode_max),geometry%v(geometry%nnode_max),geometry%w(geometry%nnode_max))
   allocate (geometry%fix(geometry%nnode_max),geometry%surface(geometry%nnode_max))
   allocate (geometry%discharge(geometry%nnode_max),geometry%precipitation(geometry%nnode_max))
@@ -64,22 +64,22 @@ zl =  geometry%zl
   if (params%transient_divide) then
      allocate(geometry%erosion_rate_history(geometry%nnode_max,params%num_bins))
   endif
-  
+
   geometry%nb=0 ! don't change this
   geometry%nt=0
-  
+
   geometry%k=params%k_scalar1    ! fluvial erosion constant
-  geometry%erosion_rate=0.d-3 ! sets erosion rate to 0
+  geometry%erosion_rate=0.1d-4 ! sets erosion rate to 0
   geometry%sediment_flux=0.d0 ! sets sediment flux to 0
   geometry%discharge=0.d0
   geometry%precipitation=0.d0
-  geometry%surface_share=0.d0
   geometry%catchment=0.d0
   geometry%fix=0.d0
   geometry%surface=0.d0
   geometry%strahler=0.d0
-  
-  
+  geometry%surface_share=0.d0
+
+
   ! generate random numbers in x, y and z
   call random_seed(SIZE = n)
   allocate (seed(n))
@@ -91,9 +91,9 @@ zl =  geometry%zl
   geometry%x=geometry%x*2.d0-1.d0
   geometry%y=geometry%y*2.d0-1.d0
   geometry%z=.01+geometry%z*zl
-  
+
   ! generates the grid
-  
+
   !call random_number(xx)
   ij=0
   do j=1,ny
@@ -125,27 +125,27 @@ zl =  geometry%zl
 
 
 
- 
-  if (params%transient_divide) then     
-     geometry%erosion_rate_history=0.d0     
+
+  if (params%transient_divide) then
+     geometry%erosion_rate_history=0.d0
   endif
 
-     
+
 
    ! housekeeping - initialize all arrayse
    geometry%precipitation=params%rainfall_height
     geometry%u=0
     geometry%v=0
-    if(params%f_varies_with_xyz .eqv. .FALSE.)geometry%w=params%uplift_scalar1
+    geometry%w=params%uplift_scalar1
    geometry%chi=0
 
 
 
-  
-  
-  
+
+
+
   call time_out ('initialize_geometry')
-  
+
   return
-  
+
 end subroutine initialize_geometry

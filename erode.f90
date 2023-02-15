@@ -235,7 +235,7 @@ subroutine erode (geometry,network,stack,delaunay,params)
 
 
 
-  if (params%n.eq.1) then
+  if (params%n.eq.1.d0) then
      do is=1,stack%nnode
         i=stack%order(is)
         if (geometry%fix(i).eq.0 .and. network%receiver(i).ne.0) then
@@ -265,7 +265,7 @@ subroutine erode (geometry,network,stack,delaunay,params)
            endif
         endif
      enddo
-  elseif (params%n.eq.2) then
+  elseif (params%n.eq.2.d0) then
      do is=1,stack%nnode
         i=stack%order(is)
         if (geometry%fix(i).eq.0 .and. network%receiver(i).ne.0) then
@@ -324,9 +324,9 @@ subroutine erode (geometry,network,stack,delaunay,params)
   ! set the erosion rate for boundary nodes to specified value
   !   this is redundent - done above already
   do i=1, geometry%nnode
+     if(geometry%fix(i).ne.0) geometry%erosion_rate(i)=min(geometry%w(i),1.d-9)
      if(geometry%erosion_rate(i).lt.1.d-9) geometry%erosion_rate(i) = 1.d-9
      if(network%receiver(i).eq.0) geometry%erosion_rate(i)=0.0d0
-     if(geometry%fix(i).ne.0) geometry%erosion_rate(i)=geometry%w(i)
   enddo
 
 
@@ -410,7 +410,7 @@ subroutine funcd (x,f,df,deltal,zi,zj,fact,n)
  
   use definitions
   implicit none
-  double precision x,f,df,deltal,zi,zj,fact, n
+  double precision x,f,df,deltal,zi,zj,fact,n
   f = x - zi + fact*((x-zj)/deltal)**n
   df = 1.d0 + fact*n*(1/deltal)*((x-zj)/deltal)**(n-1)
   return 

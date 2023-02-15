@@ -336,7 +336,16 @@ subroutine add_remove_nodes(geometry,network,params,delaunay)
                        geometry%u(geometry%nnode)=(geometry%u(i)+geometry%u(j))/2.d0
                        geometry%v(geometry%nnode)=(geometry%v(i)+geometry%v(j))/2.d0
                        geometry%w(geometry%nnode)=(geometry%w(i)+geometry%w(j))/2.d0
-                       geometry%fix(geometry%nnode)=geometry%fix(i)
+
+                       ! @YWANG JAN. 2022, fix situation of corner node (xi = xmax and yi=ymin)
+                       !geometry%fix(geometry%nnode)=geometry%fix(i)
+                       if (geometry%y(j) .eq. ymax) then
+                           geometry%fix(geometry%nnode)=geometry%fix(i)
+                       else
+                           geometry%fix(geometry%nnode)=geometry%fix(j)
+                       endif
+                       ! @YWANG JAN. 2022, fix situation of corner node (xi = xmax and yi=ymin)
+
                        geometry%surface(geometry%nnode)=0.0d0
                        geometry%discharge(geometry%nnode)=0.0d0
                        geometry%precipitation(geometry%nnode)=(geometry%precipitation(i)+geometry%precipitation(j))/2.d0
@@ -418,7 +427,16 @@ subroutine add_remove_nodes(geometry,network,params,delaunay)
                        geometry%u(geometry%nnode)=(geometry%u(i)+geometry%u(j))/2.d0
                        geometry%v(geometry%nnode)=(geometry%v(i)+geometry%v(j))/2.d0
                        geometry%w(geometry%nnode)=(geometry%w(i)+geometry%w(j))/2.d0
-                       geometry%fix(geometry%nnode)=geometry%fix(i)
+
+                       ! @YWANG JAN. 2022, fix situation of corner node (xi = xmin and yi=ymin)
+                       !geometry%fix(geometry%nnode)=geometry%fix(i)
+                       if (geometry%y(j) .eq. ymin) then
+                           geometry%fix(geometry%nnode)=geometry%fix(i)
+                       else
+                           geometry%fix(geometry%nnode)=geometry%fix(j)
+                       endif
+                       ! @YWANG JAN. 2022, fix situation of corner node (xi = xmin and yi=ymin)
+
                        geometry%surface(geometry%nnode)=0.0d0
                        geometry%discharge(geometry%nnode)=0.0d0
                        geometry%precipitation(geometry%nnode)=(geometry%precipitation(i)+geometry%precipitation(j))/2.d0
