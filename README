@@ -1,0 +1,10 @@
+Divide and Capture :  
+
+Goren, L., Willett, S.D., Herman, F., Braun, J., 2014. 
+Coupled numerical–analytical approach to landscape evolution modeling
+Earth Surface Processes and Landforms 
+http://refhub.elsevier.com/S0040-1951(15)00404-7/rf0165
+
+This is a resynchronisation of the source code from January 2018. 
+The root master branch has additional output of chi values, 
+and uses improved remeshing.

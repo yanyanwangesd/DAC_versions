@@ -1,0 +1,15 @@
+F90 = gfortran
+CC = gcc
+LIBS = -lm -lgfortran -LNN -lnn
+##
+## build version debug
+#FLAGS =  -c -fbounds-check -O0 -g -ggdb  -ffree-line-length-400 -Wmaybe-uninitialized
+#CFLAGS = -c -O0 -g -ggdb -Wall
+#INCLUDE =
+#OPTIONS =  -O0 -g -ggdb
+##
+#build version release
+FLAGS =  -c -fbounds-check -O2  -ffree-line-length-400 
+CFLAGS = -c -O2 
+INCLUDE =
+OPTIONS =  -O2

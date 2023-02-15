@@ -1,0 +1,367 @@
+/INIT.DAC, the input file for the DAC code
+/
+/ Some general comments: 
+/ commented lines can be begun with "/", "!", or " "(white space)
+/ (so that C and F style comments valid),
+/ use space for beauty instead of empty lines (? although it seem to work, better not ...)
+/ any number of consecutive comments allowed
+/ do not put any comments on same line after variables
+/
+/ exponential notations are allowed, e.g. 3.1d-5, 3e6
+/ CAUTION - check that no line is started with an empty space!
+/
+/ logical switches: "0" = disable;  ">,<0" (anything else) = enable
+/
+/ Note that no integrity checking is included (0 / negative values / senseless values cause no warning) - get it right!
+ 
+
+ 
+/OVERVIEW over this file:
+/   1. Geometry of the model
+/       - Size and resolution
+/       - Mesh: addition and removal
+/       - Boundary behavior
+/   2. Time stepping
+/   3. Channel and hillslope parameters
+/   4. Forcing parameters: uplift, precipitation
+/   5. Feature control: enabling/disabling processes
+/  (6. User-defined fields)
+
+ 
+ 
+/-----------------------------------------------------------------------------
+/ 1. GEOMETRY ----------------------------------------------------------------
+ 
+/xl,yl - spatial extent of domain [m]
+80000.d0
+
+/yl
+80000.d0
+
+
+/mesh and its parameters----------
+
+/nx,ny  - node numbers for initial grid spacing
+/nx:
+51
+
+/ny:
+51
+
+/zl - maximum height of initial landscape [m]
+1.d0
+
+/nnmax - maximum number of neighbours - 12 is enough for uplift-only cases
+50
+
+/xc  -  hillslope length (in the vicinity of divides) [m]  CRUCIAL
+700.d0
+  
+/next three concern addition and removal of nodes
+/lmax - maximum distance between two points before adding a node
+2.4d3
+
+/amin  -  minimum catchment head area before node removed
+3.5d5
+
+/ldivmax  -  maximum divide length for adding nodes
+3.6d3
+
+/max_adv  -  max advection velocity
+1.0d-3
+
+
+
+ 
+/boundaries ------------------------
+/ 0- no motion, constant elevation=0; 1 - no motion, constant elevation = initial elevation; 2 - implicit uplift, set as average of neighbours,  4 - normal uplift,  8 - motion in x, 16 - motion in y
+/ combine as follows by addition: no uplift and x-motion 8 or 9,  uplift and x-motion=12, uplift and y-motion=20, motion in all 3 directions = 28
+/ negative values: boundary is reflective, e.g. : -18 boundary elevation as inner neighbour average, motion in y, no river connections over boundary
+/left boundary
+0
+/right boundary
+0
+/front boundary
+0
+/back boundary
+0
+
+
+
+
+ 
+/---------------------------------------------------------------------------
+/ 2. TIME STEPPING ---------------------------------------------------------
+ 
+/time -----
+/deltat [a] - time step length
+0.05d3
+ 
+/time  [a] - time at start (should always be 0)
+0.d0  
+ 
+/tfinal [a] - final time (in years)
+/8.0d7
+0.1d3
+ 
+/freq  -  frequency, plot every "freq"-th timestep 
+500
+ 
+
+
+
+
+/-----------------------------------------------------------------------------
+/ 3. CHANNEL AND HILLSLOPE PARAMETERS ----------------------------------------
+
+/k_scalar1   -  erodibility constant
+1.d-6
+
+/ streams
+/Stream power, Hack's law -----
+/n  -  slope exponent in fluvial incision law	INTEGER OR DOUBLE? here integer as declared in "parm" type 
+1.d0
+ 
+/m  -  area (or discharge) exponent in fluvial incision law
+0.5d0
+ 
+/h  -  Hack's exponent
+2.d0
+
+/ka  -  Hack's constant (no unit)
+1.6666666666666667d0 
+ 
+ 
+/Hill slope, analytical portion parameters -----
+/note that xc  -  hillslope length (in the vicinity of divides) has already been set
+
+/tanthetac  -  tangent of hillslope slope limit
+.3839d0
+
+
+/diffusivity  -  diffusivity for hilltops
+.2d-5
+
+/min_erosion_rate  -  minimum allowable erosion rate for diffusion channel head  .1d-4
+.1d-4
+
+/min_tan_head_slope  -  minimum slope of channel head (used as a threshold to diffusion)
+1.125d-2
+
+
+
+
+
+/-----------------------------------------------------------------------------
+/ 4. FORCING PARAMETERS ------------------------------------------------------
+
+/rainfall_height   -  this is used for constant rainfall parameter [m/a]
+1.d0
+
+/uplift and advection parameters -----
+/uplift_scalar1  -  uplift rate as constant in interior [m/a]
+6.0d-4
+
+ 
+ 
+/---------------------------------------------------------------------------
+/ 5. FEATURE CONTROL -------------------------------------------------------
+/for flags: 0=.FALSE.  1=.TRUE.
+ 
+/ what does it do -----------
+/add_nodes   		- flag to allow adding nodes
+1
+
+/move_points.     	- flag to allow the horizontal motion of nodes
+1
+ 
+/capture		- flag to allow for captures
+1
+ 
+/divide               	- flag to allow for divide calculations
+1
+ 
+/small_divide 		- flag to allow for small divide calculations (case where divide is very close to zj)
+1
+ 
+/diffusion 		- flag to allow diffusive hilltops
+1
+ 
+/transient_divide 	- flag to calculate transient elevation of fluvial part of divides 
+0
+ 
+/num_bins               - how many bins to store erosion values
+12
+ 
+/sample_per_bin         - how many samples to store in bin
+1000
+ 
+
+/input/output ----------------
+/read_restart 		- flag to read GeoFile to restart run from the end of previous run
+0
+ 
+/num_restart            - which GeoFile to read
+0
+ 
+/ascii                  - flag to output ASCII data of the run (used for post-processing)
+0
+ 
+/vtk_fine               - whether to output the full triangulation involving the divides. Large output files.
+0
+ 
+
+
+
+
+
+/---------------------------------------------------------------------------
+/ --------------------------------------------------------------------------
+/ 6. SPECIAL PROVISIONS - vary one input parameter as function of either x,y,z
+/ see bottom for syntax
+
+/f_varies_with_xyz        -  1 yes, 0 no: stop reading here
+0
+
+/f_num_sets             - how many times something is set as function of ... arbitrary combinations possible
+4
+
+
+
+//A lot of things
+//---------------- block 1
+/f_depends_on  - choice:  x,y,z
+y
+/f_variable_determined  - choice:  u,v,w, p,k
+u
+/superposition  0 - overwrite, 1 - add, 2 - multiply
+0
+/time bounds [a], if any -  write 0, 0 for eternity; e.g. 0, 1.d6 makes condition only valid for first 1 Ma
+0, 1.25e6
+/number of segments to follow - not determined automatically
+1
+/polynomial lines, matching number above
+0,160000,0,              1e-4, 1e-7
+//---------------- block 1
+
+
+//---------------- block 2
+/f_depends_on  - choice:  x,y,z
+y
+/f_variable_determined  - choice:  u,v,w, p,k
+u
+/superposition  0 - overwrite, 1 - add, 2 - multiply
+0
+/time bounds [a], if any -  write 0, 0 for eternity; e.g. 0, 1.d6 makes condition only valid for first 1 Ma
+1.25e6, 1e8
+/number of segments to follow - not determined automatically
+1
+/polynomial lines, matching number above
+0,160000,0,              -1e-4, -1e-7
+//---------------- block 2
+
+
+//---------------- block 3
+/f_depends_on  - choice:  x,y,z
+x
+/f_variable_determined  - choice:  u,v,w, p,k
+v
+/superposition  0 - overwrite, 1 - add, 2 - multiply
+0
+/time bounds [a], if any -  write 0, 0 for eternity; e.g. 0, 1.d6 makes condition only valid for first 1 Ma
+0, 0
+/number of segments to follow - not determined automatically
+3
+/polynomial lines, matching number above
+0, 20000,0,                  0
+0,60000,2000,              1e-4
+60000,90000,60000,           0
+//---------------- block 3
+
+//---------------- block 4
+/f_depends_on  - choice:  x,y,z
+x
+/f_variable_determined  - choice:  u,v,w, p,k
+w
+/superposition  0 - overwrite, 1 - add, 2 - multiply
+0
+/time bounds [a], if any -  write 0, 0 for eternity; e.g. 0, 1.d6 makes condition only valid for first 1 Ma
+0, 0
+/number of segments to follow - not determined automatically
+3
+/polynomial lines, matching number above
+0,20000,0,              1e-4
+20000,60000,20000,      1e-3
+60000,90000,60000,      1e-4
+//---------------- block 4
+
+
+//---------------- block 5
+/f_depends_on  - choice:  x,y,z
+y
+/f_variable_determined  - choice:  u,v,w, p,k
+P
+/superposition  0 - overwrite, 1 - add, 2 - multiply
+0
+/time bounds [a], if any -  write 0, 0 for eternity; e.g. 0, 1.d6 makes condition only valid for first 1 Ma
+0, 0
+/number of segments to follow - not determined automatically
+1
+/polynomial lines, matching number above
+0,80000,0,              9, -1.1e-4
+//---------------- block 5
+
+
+
+
+
+
+
+
+
+
+//if you have more input stored below, it will not be read beyond the number of blocks specified above
+
+//---------------- block 1
+/f_depends_on  - choice:  x,y,z
+y
+/f_variable_determined  - choice:  u,v,w, p,k
+w
+/superposition  0 - overwrite, 1 - add, 2 - multiply
+0
+/time bounds [a], if any -  write 0, 0 for eternity; e.g. 0, 1.d6 makes condition only valid for first 1 Ma
+0, 0
+/number of segments to follow - important, not determined automatically
+4
+/polynomial lines, matching number above
+0,20000,0,              1e-3
+20000,40000,20000,      1e-2
+40000,60000,40000,      -1e-3
+60000,80000,60000,      -1e-3, 1e-6
+//---------------- block 1
+
+
+//SYNTAX EXPLANATION
+//repetitive segment block for each set, with
+/segment-wise polynomial definition:
+/ f(z) = c0 + c1*(z-z_offset) + c2*(z-z_offset)^2 + c3*(z-z_offset)^3 + ... + cn*(z-z_offset)^n  || [start z; end z]
+/ n: maximum polynomial degree is 50
+/start z, end z, z_offset, c0, c1,
+/valid input examples with comma separattion (minus the initial slash):
+/0, 10000, 0,  1e-6,  -1e-10
+/ means
+/ at virtually every altitude, decrease f from 1e-6 at 0 by 1e-10 per meter up
+/0, 1000, 0,  1e-6
+/1000, 3000, 1000, 1e-6, -2e-10
+/3000, 4000, 3000, 6e-7, -1e-10, -1e-13
+/4000, 10000, 4000, 4e-7
+/ means
+/ up to 1000,       f constant at k=1e-6
+/ from 1000-3000 m, f = 1e-6 -2e-10*(z-1000)
+/ from 3000-4000 m, f = 6e-7 -1e-10*(z-3000) -1e-13*(z-3000)^2
+/ above 4000 m,     f constant at k=4e-7
+/ note that connecting the f-values at segments (6e-7, 4e-7) is user responsibility
+
+
+
+/other note: if segments overlap in elevation, the one that is declared first takes precedence for its entire range
