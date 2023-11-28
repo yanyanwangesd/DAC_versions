@@ -9,7 +9,7 @@ The init.dac file is the input file where users can specify model geometry, para
 + Wiki pages are under development.
 
 ## Related publications
-+ [Goren et al 2014](https://www.dropbox.com/sh/vhak8c4o6rvhg58/AAB7G-TQitpBSJxS3--FB92Ia?dl=0)
++ [Goren et al 2014](https://onlinelibrary.wiley.com/doi/full/10.1002/esp.3514)
 + [Yang et al 2015](https://www.nature.com/articles/nature14354)
 + [Castelltort et al 2012](https://www.nature.com/articles/ngeo1582)
 + [Wang et al 2023](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2022JF007001)
