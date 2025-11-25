@@ -127,7 +127,7 @@ subroutine captures_and_divides (geometry,network,params,delaunay)
                      if(geometry%boundary(geometry%fix(j)).lt.0) bflag=geometry%boundary(geometry%fix(j))
                   endif
                 !if (geometry%z(i).lt.geometry%z(j)  .and. geometry%fix(j).eq.0   .and. geometry%x(i).gt.0.5d0 .and. geometry%x(j).gt.0.5d0 .and. fixprod.ne.1 .and. geometry%y(i).gt.0.5d0 .and. geometry%y(j).gt.0.5d0 .and. geometry%y(i).lt.geometry%yl-0.5d0 .and. geometry%y(j).lt.geometry%yl-0.5d0        ) then! check that i is lower thanis lower than j, only capture 3 sides ,minus x=0
-                if (geometry%z(i).lt.geometry%z(j)     .and. fixprod.eq.0  .and. bflag .ge.0 ) then! do not capture if both boundaries
+                if (geometry%z(i).lt.geometry%z(j)     .and. fixprod.eq.0  .and. geometry%fix(j).eq.0 ) then! do not capture if both boundaries
 		    l=dsqrt((geometry%x(i)-geometry%x(j))**2.d0+(geometry%y(i)-geometry%y(j))**2.d0) ! l is length betwenn i and j
 		    if(l.gt.params%xc)then
 		      if (params%transient_divide) then
@@ -729,7 +729,7 @@ subroutine captures_and_divides (geometry,network,params,delaunay)
                  if(geometry%boundary(geometry%fix(j)).lt.0) bflag=geometry%boundary(geometry%fix(j))
               endif
 
-                if (geometry%z(i).lt.geometry%z(j)     .and. fixprod.eq.0  .and. bflag .ge.0 ) then ! check that i is lower than j
+                if (geometry%z(i).lt.geometry%z(j)     .and. fixprod.eq.0  .and. geometry%fix(j).eq.0 ) then ! check that i is lower than j
 		    l=dsqrt((geometry%x(i)-geometry%x(j))**2.d0+(geometry%y(i)-geometry%y(j))**2.d0) ! l is length betwenn i and j
 		    if(l.gt.params%xc) then
 		      if (params%transient_divide) then
