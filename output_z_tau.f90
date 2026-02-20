@@ -65,7 +65,7 @@ subroutine output_z_tau (params,geometry,network,stack)
         faketau(j)=faketau(k)+(1./(ks_K*contributing_area(j)**params%m))*l
         chi(j) = chi(k) + l*(geometry%w(j)**(1/params%n))*&
              &(Anot/geometry%discharge(j))**(params%m/params%n)
-        geometry%chi(j) = geometry%chi(k)+l*(Anot/(contributing_area(j)))**params%m
+        geometry%chi(j) = geometry%chi(k)+l*(Anot/(contributing_area(j)))**(params%m/params%n)
      endif
   enddo
   open (75,file='ASCII/tau_z'//cs,status='unknown')
