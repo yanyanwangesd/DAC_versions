@@ -269,10 +269,11 @@ subroutine captures_and_divides (geometry,network,params,delaunay)
 
 	  !if no transient divide, then the divide height should not depend on the erosion rate due to capture but only due to 
 	  ! former fluvial processes
-	  if (params%transient_divide) then
+	  ! discussion September 2026, if not using the transient divide solution, the erosion rate should not depend on the erosion rate due to capture but only due to former fluvial processes as well. 
+	  !if (params%transient_divide) then
 	      geometry%erosion_rate(capnode(icap)) = (geometry%erosion_rate(capnode(icap))*params%deltat +&
 		  &geometry%z(capnode(icap))-capelev(icap))/params%deltat
-	  endif
+	 ! endif
 	  !add to the first bin the updated erosion rate
 	  if (params%transient_divide) then
 	      cpn=capnode(icap) !cpn is the captured node
@@ -861,10 +862,11 @@ subroutine captures_and_divides (geometry,network,params,delaunay)
 	  
 	  !if no transient divide, then the divide height should not depend on the erosion rate due to capture but only due to 
 	  ! former fluvial processes
-	  if (params%transient_divide) then
+	  ! discussion September 2026, if not using the transient divide solution, the erosion rate should not depend on the erosion rate due to capture but only due to former fluvial processes as well. 
+	 ! if (params%transient_divide) then
 	      geometry%erosion_rate(capnode(icap)) = (geometry%erosion_rate(capnode(icap))*params%deltat +&
 		  &geometry%z(capnode(icap))-capelev(icap))/params%deltat
-	  endif
+	 ! endif
 	  
 	  !add to the first bin the updated erosion rate
 	  if (params%transient_divide) then
