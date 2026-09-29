@@ -95,17 +95,16 @@
  
 /time -----
 /deltat [a] - time step length
-0.05d3
+2.d3
  
 /time  [a] - time at start (should always be 0)
 0.d0  
  
 /tfinal [a] - final time (in years)
-/8.0d7
-0.1d3
+5.d6
  
 /freq  -  frequency, plot every "freq"-th timestep 
-500
+100
  
 
 
@@ -123,10 +122,10 @@
 1.d0
  
 /m  -  area (or discharge) exponent in fluvial incision law
-0.5d0
+0.55d0
  
 /h  -  Hack's exponent
-2.d0
+1.d0
 
 /ka  -  Hack's constant (no unit)
 1.6666666666666667d0 
@@ -140,7 +139,7 @@
 
 
 /diffusivity  -  diffusivity for hilltops
-.2d-5
+2.d-3
 
 /min_erosion_rate  -  minimum allowable erosion rate for diffusion channel head  .1d-4
 .1d-4
@@ -221,11 +220,10 @@
 / see bottom for syntax
 
 /f_varies_with_xyz        -  1 yes, 0 no: stop reading here
-0
+1
 
 /f_num_sets             - how many times something is set as function of ... arbitrary combinations possible
-4
-
+3
 
 
 //A lot of things
@@ -233,15 +231,16 @@
 /f_depends_on  - choice:  x,y,z
 y
 /f_variable_determined  - choice:  u,v,w, p,k
-u
+w
 /superposition  0 - overwrite, 1 - add, 2 - multiply
 0
 /time bounds [a], if any -  write 0, 0 for eternity; e.g. 0, 1.d6 makes condition only valid for first 1 Ma
-0, 1.25e6
+0, 0
 /number of segments to follow - not determined automatically
-1
+2
 /polynomial lines, matching number above
-0,160000,0,              1e-4, 1e-7
+0,40.d3,0,  1.d-4
+40.d3, 80.d3, 40.d3, 1.d-3
 //---------------- block 1
 
 
@@ -249,16 +248,34 @@ u
 /f_depends_on  - choice:  x,y,z
 y
 /f_variable_determined  - choice:  u,v,w, p,k
-u
+k
 /superposition  0 - overwrite, 1 - add, 2 - multiply
 0
 /time bounds [a], if any -  write 0, 0 for eternity; e.g. 0, 1.d6 makes condition only valid for first 1 Ma
-1.25e6, 1e8
+0, 2.d6
 /number of segments to follow - not determined automatically
-1
+2
 /polynomial lines, matching number above
-0,160000,0,              -1e-4, -1e-7
+0,40.d3,0,  1.d-6
+40.d3, 80.d3, 40.d3, 1.d-5
 //---------------- block 2
+
+
+//---------------- block 3
+/f_depends_on  - choice:  x,y,z
+y
+/f_variable_determined  - choice:  u,v,w, p,k
+k
+/superposition  0 - overwrite, 1 - add, 2 - multiply
+0
+/time bounds [a], if any -  write 0, 0 for eternity; e.g. 0, 1.d6 makes condition only valid for first 1 Ma
+2.d6, 5.d6
+/number of segments to follow - not determined automatically
+2
+/polynomial lines, matching number above
+0,40.d3,0,  1.d-5
+40.d3, 80.d3, 40.d3, 1.d-6
+//---------------- block 3
 
 
 //---------------- block 3
